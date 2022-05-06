@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/drawable/animation.xml" value="0.3828125" />
         <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/drawable/ic_baseline_volume_off_24.xml" value="0.13055555555555556" />
+        <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/layout/activity_instruction.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/layout/activity_splash_screen.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Mosta/AndroidStudioProjects/ChopperGame/app/src/main/res/layout/activity_splash_screen1.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

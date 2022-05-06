@@ -1,4 +1,4 @@
-package com.example.choppergame;
+package com.example.AlienGame;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,14 +25,14 @@ public class GameView extends SurfaceView implements Runnable{
     public static float screenRatioX, screenRatioY;
     private Paint paint;
     private List<Bullet> bullets;
-    private Bird[] birds;
+    private EnemyAlien[] aliens;
     private SharedPreferences prefs;
     private Random random;
     private SoundPool soundPool;
     private int sound;
-    private Flight flight;
+    private MyAlien alien;
     private GameActivity activity;
-    private Background background1, background2 ;
+    private Background background1, background2 , background3 ,background4 ;
 
     public GameView(GameActivity activity, int screenX, int screenY) {
         super(activity);
@@ -65,24 +65,26 @@ public class GameView extends SurfaceView implements Runnable{
 
         background1 = new Background(screenX, screenY, getResources());
         background2 = new Background(screenX, screenY, getResources());
+        background3 = new Background(screenX, screenY, getResources());
+        background4 = new Background(screenX, screenY, getResources());
 
-        flight = new Flight(this, screenY, getResources());
+
+        alien = new MyAlien(this, screenY, getResources());
 
         bullets = new ArrayList<>();
 
-        background2.x = screenX;
 
         // To resize the score inside the game and the color of the counter
         paint = new Paint();
         paint.setTextSize(100);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.LTGRAY);
 
-        birds = new Bird[4];
+        aliens = new EnemyAlien[4];
 
-        for (int i = 0;i < 4;i++) {
+        for (int i = 0;i < 4; i++) {
 
-            Bird bird = new Bird(getResources());
-            birds[i] = bird;
+            EnemyAlien bird = new EnemyAlien(getResources());
+            aliens[i] = bird;
 
         }
 
@@ -105,27 +107,33 @@ public class GameView extends SurfaceView implements Runnable{
 
     private void update () {
 
+        // The background multiplied with the ScreenRatioX / so the screen moves this way
         background1.x -= 10 * screenRatioX;
-        background2.x -= 10 * screenRatioX;
 
-        if (background1.x + background1.background.getWidth() < 0) {
+        if(background1.x + background1.background.getWidth() < 0){
             background1.x = screenX;
         }
-
-        if (background2.x + background2.background.getWidth() < 0) {
+        if(background2.x + background2.background.getWidth() < 0){
             background2.x = screenX;
         }
+        if(background3.x + background3.background.getWidth() < 0){
+            background3.x = screenX;
+        }
+        if(background4.x + background4.background.getWidth() < 0){
+            background4.x = screenX;
+        }
 
-        if (flight.isGoingUp)
-            flight.y -= 30 * screenRatioY;
+
+        if (alien.isGoingUp)
+            alien.y -= 30 * screenRatioY;
         else
-            flight.y += 30 * screenRatioY;
+            alien.y += 30 * screenRatioY;
 
-        if (flight.y < 0)
-            flight.y = 0;
+        if (alien.y < 0)
+            alien.y = 0;
 
-        if (flight.y >= screenY - flight.height)
-            flight.y = screenY - flight.height;
+        if (alien.y >= screenY - alien.height)
+            alien.y = screenY - alien.height;
 
         List<Bullet> trash = new ArrayList<>();
 
@@ -136,13 +144,13 @@ public class GameView extends SurfaceView implements Runnable{
 
             bullet.x += 50 * screenRatioX;
 
-            for (Bird bird : birds) {
+            for (EnemyAlien bird : aliens) {
 
                 if (Rect.intersects(bird.getCollisionShape(),
                         bullet.getCollisionShape())) {
 
                     score++;
-                    bird.x = -300;
+                    bird.x = -1000;
                     bullet.x = screenX + 500;
                     bird.wasShot = true;
 
@@ -155,30 +163,30 @@ public class GameView extends SurfaceView implements Runnable{
         for (Bullet bullet : trash)
             bullets.remove(bullet);
 
-        for (Bird bird : birds) {
+        for (EnemyAlien alien : aliens) {
 
-            bird.x -= bird.speed;
+            alien.x -= alien.speed;
 
-            if (bird.x + bird.width < 0) {
+            if (alien.x + alien.width < 0) {
 
-                if (!bird.wasShot) {
+                if (!alien.wasShot) {
                     isGameOver = true;
                     return;
                 }
 
                 int bound = (int) (30 * screenRatioX);
-                bird.speed = random.nextInt(bound);
+                alien.speed = random.nextInt(bound);
 
-                if (bird.speed < 10 * screenRatioX)
-                    bird.speed = (int) (10 * screenRatioX);
+                if (alien.speed < 10 * screenRatioX)
+                    alien.speed = (int) (10 * screenRatioX);
 
-                bird.x = screenX;
-                bird.y = random.nextInt(screenY - bird.height);
+                alien.x = screenX;
+                alien.y = random.nextInt(screenY - alien.height);
 
-                bird.wasShot = false;
+                alien.wasShot = false;
             }
 
-            if (Rect.intersects(bird.getCollisionShape(), flight.getCollisionShape())) {
+            if (Rect.intersects(alien.getCollisionShape(), this.alien.getCollisionShape())) {
 
                 isGameOver = true;
                 return;
@@ -190,33 +198,36 @@ public class GameView extends SurfaceView implements Runnable{
 
     private void draw () {
 
-        if (getHolder().getSurface().isValid()) {
+        if (getHolder().getSurface().isValid()) //This will ensure that the SurfaceView object have been successfully initiated
+        {
 
-            Canvas canvas = getHolder().lockCanvas();
-            canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
-            canvas.drawBitmap(background1.background2,background1.x, background1.y, paint);
+            Canvas canvas = getHolder().lockCanvas(); //Calling this function returns the current canvas that is have been displayed on the screen
+
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
+            canvas.drawBitmap(background1.background2,background1.x, background1.y, paint);
+            canvas.drawBitmap(background3.background3,background3.x, background3.y, paint);
+            canvas.drawBitmap(background1.background4,background1.x, background1.y, paint);
 
-            for (Bird bird : birds)
-                canvas.drawBitmap(bird.getBird(), bird.x, bird.y, paint);
+            for (EnemyAlien bird : aliens)
+                canvas.drawBitmap(bird.getAlien(), bird.x, bird.y, paint);
 
             canvas.drawText(score + "", screenX / 2f, 164, paint);
 
             if (isGameOver) {
                 isPlaying = false;
-                canvas.drawBitmap(flight.getDead(), flight.x, flight.y, paint);
+                canvas.drawBitmap(alien.getDead(), alien.x, alien.y, paint);
                 getHolder().unlockCanvasAndPost(canvas);
                 saveIfHighScore();
                 waitBeforeExiting ();
                 return;
             }
 
-            canvas.drawBitmap(flight.getFlight(), flight.x, flight.y, paint);
+            canvas.drawBitmap(alien.getMyAlien(), alien.x, alien.y, paint);
 
             for (Bullet bullet : bullets)
                 canvas.drawBitmap(bullet.bullet, bullet.x, bullet.y, paint);
 
-            getHolder().unlockCanvasAndPost(canvas);
+            getHolder().unlockCanvasAndPost(canvas); //This function accept the canvas that needed to be draw on the screen
 
         }
 
@@ -246,7 +257,7 @@ public class GameView extends SurfaceView implements Runnable{
 
     private void sleep () {
         try {
-            Thread.sleep(17);
+            Thread.sleep(20);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -277,13 +288,13 @@ public class GameView extends SurfaceView implements Runnable{
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (event.getX() < screenX / 2) {
-                    flight.isGoingUp = true;
+                    alien.isGoingUp = true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                flight.isGoingUp = false;
+                alien.isGoingUp = false;
                 if (event.getX() > screenX / 2)
-                    flight.toShoot++;
+                    alien.toShoot++;
                 break;
         }
 
@@ -296,8 +307,8 @@ public class GameView extends SurfaceView implements Runnable{
             soundPool.play(sound, 1, 1, 0, 0, 1);
 
         Bullet bullet = new Bullet(getResources());
-        bullet.x = flight.x + flight.width;
-        bullet.y = flight.y + (flight.height / 2);
+        bullet.x = alien.x + alien.width;
+        bullet.y = alien.y + (alien.height / 2);
         bullets.add(bullet);
 
     }

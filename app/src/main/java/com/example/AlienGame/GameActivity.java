@@ -1,4 +1,4 @@
-package com.example.choppergame;
+package com.example.AlienGame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 public class GameActivity extends AppCompatActivity {
 
-    private GameView gameView;
+    private GameView gameView;  //Global Object to display the surFaceView on the screen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

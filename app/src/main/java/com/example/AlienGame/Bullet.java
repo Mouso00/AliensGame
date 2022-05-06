@@ -1,7 +1,7 @@
-package com.example.choppergame;
+package com.example.AlienGame;
 
-import static com.example.choppergame.GameView.screenRatioX;
-import static com.example.choppergame.GameView.screenRatioY;
+import static com.example.AlienGame.GameView.screenRatioX;
+import static com.example.AlienGame.GameView.screenRatioY;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,8 +20,8 @@ public class Bullet {
         width = bullet.getWidth();
         height = bullet.getHeight();
 
-        width /=2;
-        height /=2;
+        width /= 2;
+        height /= 2;
 
         width *= (int) screenRatioX;
         height *= (int) screenRatioY;

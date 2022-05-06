@@ -1,30 +1,30 @@
-package com.example.choppergame;
+package com.example.AlienGame;
 
-import static com.example.choppergame.GameView.screenRatioX;
-import static com.example.choppergame.GameView.screenRatioY;
+import static com.example.AlienGame.GameView.screenRatioX;
+import static com.example.AlienGame.GameView.screenRatioY;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-public class Flight {
+public class MyAlien {
 
     int toShoot = 0 ;
     boolean isGoingUp = false;
     int x, y, width , height, wingCounter = 0, shootCounter = 1;
-    Bitmap flight1, flight2, shoot1,shoot2,shoot3,shoot4,shoot5, dead ;
+    Bitmap myAlien1, myAlien2, shoot1,shoot2,shoot3,shoot4,shoot5, dead ;
     private GameView gameView;
 
-    Flight(GameView gameView , int screenY, Resources res){
+    MyAlien(GameView gameView , int screenY, Resources res){
 
         this.gameView = gameView;
 
-        flight1 = BitmapFactory.decodeResource(res, R.drawable.fly1);
-        flight2 = BitmapFactory.decodeResource(res, R.drawable.fly2);
+        myAlien1 = BitmapFactory.decodeResource(res, R.drawable.fly1);
+        myAlien2 = BitmapFactory.decodeResource(res, R.drawable.fly2);
 
-        width = flight1.getWidth();
-        height = flight1.getHeight();
+        width = myAlien1.getWidth();
+        height = myAlien1.getHeight();
 
         width /= 4;
         height /= 4;
@@ -32,8 +32,8 @@ public class Flight {
         width *= (int) screenRatioX;
         height *=(int) screenRatioY;
 
-        flight1 = Bitmap.createScaledBitmap(flight1,width,height,false);
-        flight2 = Bitmap.createScaledBitmap(flight2,width,height,false);
+        myAlien1 = Bitmap.createScaledBitmap(myAlien1,width,height,false);
+        myAlien2 = Bitmap.createScaledBitmap(myAlien2,width,height,false);
 
         shoot1 = BitmapFactory.decodeResource(res, R.drawable.shoot1);
         shoot2 = BitmapFactory.decodeResource(res, R.drawable.shoot2);
@@ -53,7 +53,7 @@ public class Flight {
          x = (int) (64* screenRatioX);
 
     }
-    Bitmap getFlight(){
+    Bitmap getMyAlien(){
 
         if(toShoot != 0){
 
@@ -83,11 +83,11 @@ public class Flight {
 
         if(wingCounter == 0){
             wingCounter++;
-            return flight1;
+            return myAlien1;
         }
         wingCounter--;
 
-        return  flight2;
+        return myAlien2;
     }
 
     Rect getCollisionShape () {

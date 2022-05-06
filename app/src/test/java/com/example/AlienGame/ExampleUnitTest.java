@@ -1,4 +1,4 @@
-package com.example.choppergame;
+package com.example.AlienGame;
 
 import org.junit.Test;
 
