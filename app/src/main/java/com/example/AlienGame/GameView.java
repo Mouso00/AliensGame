@@ -1,5 +1,6 @@
 package com.example.AlienGame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,21 +19,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressLint("ViewConstructor")
 public class GameView extends SurfaceView implements Runnable{
     private Thread thread;
     private boolean isPlaying, isGameOver = false;
-    private int screenX, screenY, score = 0;
+    private final int screenX;
+    private final int screenY;
+    private int score = 0;
     public static float screenRatioX, screenRatioY;
-    private Paint paint;
-    private List<Bullet> bullets;
-    private EnemyAlien[] aliens;
-    private SharedPreferences prefs;
-    private Random random;
-    private SoundPool soundPool;
-    private int sound;
-    private MyAlien alien;
-    private GameActivity activity;
-    private Background background1, background2 , background3 ,background4 ;
+    private final Paint paint;
+    private final List<Bullet> bullets;
+    private final EnemyAlien[] aliens;
+    private final SharedPreferences prefs;
+    private final Random random;
+    private final SoundPool soundPool;
+    private final int sound;
+    private final MyAlien alien;
+    private final GameActivity activity;
+    private final Background background1;
+    private final Background background2;
+    private final Background background3;
+    private final Background background4 ;
 
     public GameView(GameActivity activity, int screenX, int screenY) {
         super(activity);
@@ -83,8 +90,8 @@ public class GameView extends SurfaceView implements Runnable{
 
         for (int i = 0;i < 4; i++) {
 
-            EnemyAlien bird = new EnemyAlien(getResources());
-            aliens[i] = bird;
+            EnemyAlien enemyAlien = new EnemyAlien(getResources());
+            aliens[i] = enemyAlien;
 
         }
 
@@ -144,15 +151,15 @@ public class GameView extends SurfaceView implements Runnable{
 
             bullet.x += 50 * screenRatioX;
 
-            for (EnemyAlien bird : aliens) {
+            for (EnemyAlien alien : aliens) {
 
-                if (Rect.intersects(bird.getCollisionShape(),
+                if (Rect.intersects(alien.getCollisionShape(),
                         bullet.getCollisionShape())) {
 
                     score++;
-                    bird.x = -1000;
+                    alien.x = -1000;
                     bullet.x = screenX + 500;
-                    bird.wasShot = true;
+                    alien.wasShot = true;
 
                 }
 
@@ -208,8 +215,8 @@ public class GameView extends SurfaceView implements Runnable{
             canvas.drawBitmap(background3.background3,background3.x, background3.y, paint);
             canvas.drawBitmap(background1.background4,background1.x, background1.y, paint);
 
-            for (EnemyAlien bird : aliens)
-                canvas.drawBitmap(bird.getAlien(), bird.x, bird.y, paint);
+            for (EnemyAlien alien : aliens)
+                canvas.drawBitmap(alien.getAlien(), alien.x, alien.y, paint);
 
             canvas.drawText(score + "", screenX / 2f, 164, paint);
 
@@ -247,9 +254,9 @@ public class GameView extends SurfaceView implements Runnable{
 
     private void saveIfHighScore() {
 
-        if (prefs.getInt("highscore", 0) < score) {
+        if (prefs.getInt("high score", 0) < score) {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("highscore", score);
+            editor.putInt("high score", score);
             editor.apply();
         }
 

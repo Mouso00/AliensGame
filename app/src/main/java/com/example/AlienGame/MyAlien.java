@@ -11,10 +11,15 @@ import android.graphics.Rect;
 public class MyAlien {
 
     int toShoot = 0 ;
-    boolean isGoingUp = false;
+    boolean isGoingUp;
+
+    {
+        isGoingUp = false;
+    }
+
     int x, y, width , height, wingCounter = 0, shootCounter = 1;
     Bitmap myAlien1, myAlien2, shoot1,shoot2,shoot3,shoot4,shoot5, dead ;
-    private GameView gameView;
+    private final GameView gameView;
 
     MyAlien(GameView gameView , int screenY, Resources res){
 

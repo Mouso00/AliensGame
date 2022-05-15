@@ -2,24 +2,23 @@ package com.example.AlienGame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean isMute;
-    AnimationDrawable backGroundAnimation;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,20 +35,12 @@ public class MainActivity extends AppCompatActivity {
         animation.setRepeatMode(Animation.REVERSE);
         View btn = findViewById(R.id.play);
         btn.startAnimation(animation);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, GameActivity.class));
-
-
-            }
-
-        });
+        btn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, GameActivity.class)));
 
         TextView highScoreTxt = findViewById(R.id.highScoreTxt);
 
         SharedPreferences prefs = getSharedPreferences("game" , MODE_PRIVATE);
-        highScoreTxt.setText("HighScore: " + prefs.getInt("highscore", 0));
+        highScoreTxt.setText("HighScore: " + prefs.getInt("high score", 0));
 
         isMute = prefs.getBoolean("isMute", false);
 
@@ -60,18 +51,15 @@ public class MainActivity extends AppCompatActivity {
         else
             volumeCtrl.setImageResource(R.drawable.ic_baseline_volume_up_24);
 
-        volumeCtrl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isMute = !isMute;
-                if(isMute)
-                    volumeCtrl.setImageResource(R.drawable.ic_baseline_volume_off_24);
-                else
-                    volumeCtrl.setImageResource(R.drawable.ic_baseline_volume_up_24);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean( "isMute" , isMute);
-                editor.apply();
-            }
+        volumeCtrl.setOnClickListener(v -> {
+            isMute = !isMute;
+            if(isMute)
+                volumeCtrl.setImageResource(R.drawable.ic_baseline_volume_off_24);
+            else
+                volumeCtrl.setImageResource(R.drawable.ic_baseline_volume_up_24);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean( "isMute" , isMute);
+            editor.apply();
         });
 
     }
